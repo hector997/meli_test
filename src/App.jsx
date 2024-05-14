@@ -4,8 +4,10 @@ import Home from './components/Home';
 import ProductDetails from './components/ProductDetails';
 import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResutls';
+import './assets/styles/main.scss';
 
 function App() {
+	//sets up the client-side routing
 	return (
 		<Router>
 			<div className="App">
