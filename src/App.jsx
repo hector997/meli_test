@@ -12,6 +12,7 @@ function App() {
 		<Router>
 			<div className="App">
 				<SearchBar />
+				{/* agregar componente breadcrumbs */}
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/items" element={<SearchResults />} />
