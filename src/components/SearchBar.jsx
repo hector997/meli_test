@@ -11,7 +11,7 @@ function SearchBar() {
 	}, []);
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		navigate(`/items?search=${query}`);
+		navigate(`/items?search=${query}`); // updates the URL with the search query
 	};
 
 	return (
