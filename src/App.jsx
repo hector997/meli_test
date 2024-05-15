@@ -32,16 +32,14 @@ function Main() {
 					setItems(data.items);
 					setCategories(data.categories);
 					setLoading(false);
+
+					console.log('cats:', categories);
 				})
 				.catch((error) => {
 					console.error('Error fetching product list:', error);
 					setError(error.message);
 					setLoading(false);
 				});
-		} else {
-			setItems([]);
-			setCategories([]);
-			setLoading(false);
 		}
 	}, [query]);
 

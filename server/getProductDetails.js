@@ -7,7 +7,7 @@ function getDecimals(number) {
 	return decimals ? decimals.length : 0;
 }
 function validateDetailData(detailsData) {
-	// this validates each item and returns a default value if there is a missing value
+	// this validates each item and returns a default if there is a missing value
 	return {
 		id: typeof detailsData.id === 'string' ? detailsData.id : null,
 		title:
@@ -16,22 +16,18 @@ function validateDetailData(detailsData) {
 				: '',
 		price: {
 			currency:
-				detailsData.currency_id &&
 				typeof detailsData.currency_id === 'string'
 					? detailsData.currency_id
 					: '',
 			amount:
-				detailsData.amount && typeof detailsData.amount === 'number'
-					? detailsData.amount
-					: 0,
+				typeof detailsData.price === 'number' ? detailsData.price : 0,
 			decimals:
-				detailsData.price && typeof detailsData.price === 'number'
+				typeof detailsData.price === 'number'
 					? getDecimals(detailsData.price)
 					: 0,
 		},
 		picture:
-			typeof detailsData.thumbnail &&
-			typeof detailsData.thumbnail === 'string'
+			detailsData.thumbnail && typeof detailsData.thumbnail === 'string'
 				? detailsData.thumbnail
 				: '',
 		condition:
@@ -43,9 +39,8 @@ function validateDetailData(detailsData) {
 				? detailsData.shipping.free_shipping
 				: false,
 		soldQuantity:
-			detailsData.sold_quantity &&
-			typeof detailsData.sold_quantity === 'number'
-				? detailsData.sold_quantity
+			typeof detailsData.initial_quantity === 'number'
+				? detailsData.initial_quantity
 				: 0,
 	};
 }
@@ -66,17 +61,26 @@ router.get('/details', async (req, res) => {
 	const descriptionApi = `https://api.mercadolibre.com/items/${productId}/description`;
 
 	try {
-		const [detailsResponse, descriptionResponse] = await Promise.all([
-			axios.get(detailsApi),
-			axios.get(descriptionApi),
-		]);
+		const detailsResponse = await axios.get(detailsApi);
 		const detailsData = detailsResponse.data || {};
-		const descriptionData = descriptionResponse.data || {};
-
 		const validatedDetails = validateDetailData(detailsData);
+
+		let descriptionData = {};
+		try {
+			// this fetches the description after the details have been fetched. If there is no description, descriptionData remains empty
+			const descriptionResponse = await axios.get(descriptionApi);
+			descriptionData = descriptionResponse.data || {};
+			console.log(descriptionData);
+		} catch (error) {
+			if (error.response && error.response.status === 404) {
+				console.warn('No description found for ', productId);
+			} else {
+				throw error;
+			}
+		}
+
 		const validatedDescription = validateDescriptionData(descriptionData);
 		const customObject = {
-			// here the custom object is created using the validated data and adding the author
 			author: {
 				name: 'Hector',
 				lastname: 'Villarino',
@@ -93,7 +97,7 @@ router.get('/details', async (req, res) => {
 			'Error fetching product details:',
 			'id:',
 			productId,
-			error
+			error.message
 		);
 		res.status(500).json({ error: 'Error fetching product details' });
 	}

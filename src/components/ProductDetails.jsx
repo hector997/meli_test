@@ -17,6 +17,7 @@ function ProductDetails() {
 
 	useEffect(() => {
 		if (id) {
+			console.log('id from param', id);
 			fetch(`/api/product/details?id=${id}`) // sends id to getProductDetails
 				.then((response) => {
 					if (!response.ok) {
@@ -25,6 +26,7 @@ function ProductDetails() {
 					return response.json();
 				})
 				.then((data) => {
+					console.log('displaying data');
 					setProduct(data.item);
 				})
 				.catch((error) => {
@@ -32,7 +34,7 @@ function ProductDetails() {
 					setError(error.message);
 				});
 		} else {
-			setProduct([]); // If there is no query, clear results
+			// setProduct([]); // if no query, clear results
 		}
 	}, [id]);
 
@@ -40,7 +42,7 @@ function ProductDetails() {
 		return <div>Error: {error}</div>;
 	}
 	if (!product) {
-		return <div className="loading">Cargando...</div>;
+		return <div className="loading">Cargando detalles...</div>;
 	}
 
 	return (

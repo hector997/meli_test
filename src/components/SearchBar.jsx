@@ -6,9 +6,6 @@ function SearchBar() {
 
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		navigate(`/`); // clears the search input when the component mounts
-	}, []);
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		navigate(`/items?search=${query}`); // updates the URL with the search query
