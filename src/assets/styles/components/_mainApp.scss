@@ -1,0 +1,12 @@
+.App {
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+	.app-content {
+		margin: auto;
+		width: 90%;
+		max-width: 810px;
+		display: flex;
+		flex-direction: column;
+	}
+}

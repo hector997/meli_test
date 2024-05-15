@@ -1,0 +1,22 @@
+.categories-container {
+	display: flex;
+	width: 100%;
+	justify-content: flex-start;
+	color: $light-grey;
+	margin: 16px 0;
+	.categories {
+		display: flex;
+		gap: 6px;
+		align-items: center;
+		.category-text {
+			margin: 0;
+			font-size: 14px;
+		}
+		.chevron-right {
+			width: 15px;
+			height: 15px;
+			margin-top: 2px;
+			opacity: 0.3;
+		}
+	}
+}

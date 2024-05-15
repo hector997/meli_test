@@ -1,0 +1,22 @@
+.card-wrapper {
+	background-color: #fff;
+	padding: 16px;
+	border-bottom: 1px solid $main-bg;
+	.card-inner {
+		display: flex;
+		gap: 16px;
+		.image-container {
+			width: 180px;
+			height: 180px;
+			border-radius: 4px;
+			overflow: hidden;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+}

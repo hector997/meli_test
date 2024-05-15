@@ -1,0 +1,33 @@
+.search-results-container {
+	display: flex;
+	flex-direction: column;
+	.no-results {
+		align-items: center;
+		border-radius: 4px;
+		flex-direction: row;
+		justify-content: center;
+		margin: 48px 0;
+		// max-width: 1018px;
+		// min-height: 204px;
+		padding: 42px 120px 32px;
+		background-color: #fff;
+		.no-results-title {
+			font-size: 24px;
+			margin: 0;
+			font-weight: 500;
+		}
+		ul {
+			padding: 0 15px;
+			li {
+				font-weight: 300;
+				span {
+					font-weight: 600;
+				}
+				a {
+					font-weight: 300;
+					color: $blue-accent;
+				}
+			}
+		}
+	}
+}
