@@ -2,7 +2,28 @@ import express from 'express';
 import axios from 'axios';
 
 const router = express.Router();
-
+function getNumberOfDecimals(number) {
+	return (number.toString().split('.')[1] || '').length; // this returns the number of decimals in a given number
+}
+function validateListData(item) {
+	// this validates each item and returns a default value if there is a missing value
+	return {
+		id: typeof item.id === 'string' ? item.id : null,
+		title: typeof item.title === 'string' ? item.title : '',
+		price: {
+			currency:
+				typeof item.currency_id === 'string' ? item.currency_id : '',
+			amount: typeof item.price === 'number' ? item.price : 0,
+			decimals: getNumberOfDecimals(item.price || 0),
+		},
+		picture: typeof item.thumbnail === 'string' ? item.thumbnail : '',
+		condition: typeof item.condition === 'string' ? item.condition : '',
+		free_shipping:
+			typeof item.shipping?.free_shipping === 'boolean'
+				? item.shipping.free_shipping
+				: false,
+	};
+}
 router.get('/list', async (req, res) => {
 	console.log('---------------- get list for', req.query.q);
 	const query = req.query.q;
@@ -11,11 +32,36 @@ router.get('/list', async (req, res) => {
 	try {
 		const apiResponse = await axios.get(apiUrl);
 		const data = apiResponse.data;
-		// const formattedResults = data.results.map(
-		// 	(item, index) => `Product ${index + 1}: ${item.title}`
-		// );
-		console.log('######## getProducsList response:', data.results);
-		res.json({ results: data });
+
+		const filters = data.filters || [];
+		// get all categories
+		const categoriesArr = filters.flatMap((filter) =>
+			filter.values.flatMap((val) => [
+				val.name,
+				...(val.path_from_root
+					? val.path_from_root.map((item) => item.name)
+					: []),
+			])
+		);
+
+		const uniqueCategories = [...new Set(categoriesArr)]; // removing duplicates using a set
+
+		const capedResults = data.results.slice(0, 4); // cap the results to 4 products
+
+		const formattedResults = capedResults.map((item) =>
+			validateListData(item)
+		);
+
+		const response = {
+			author: {
+				name: 'Hector',
+				lastname: 'Villarino',
+			},
+			categories: uniqueCategories,
+			items: formattedResults,
+		};
+		console.log('######## getProducsList response:', response);
+		res.json(response);
 	} catch (error) {
 		console.error('Error fetching data:', error);
 		res.status(500).json({ error: 'Error fetching data' });

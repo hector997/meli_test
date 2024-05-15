@@ -3,22 +3,38 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import ProductDetails from './components/ProductDetails';
 import SearchBar from './components/SearchBar';
-import SearchResults from './components/SearchResutls';
+import SearchResults from './components/SearchResults';
+import Categories from './components/Categories';
+import { ContextProvider, useAppContext } from './context/ContextProvider';
 import './assets/styles/main.scss';
 
+function Main() {
+	const { items, categories } = useAppContext();
+
+	return (
+		<div className="App">
+			<SearchBar />
+			{categories && categories.length > 0 && (
+				<Categories categories={categories} />
+			)}
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route
+					path="/items"
+					element={<SearchResults items={items} />}
+				/>
+				<Route path="/items/:id" element={<ProductDetails />} />
+			</Routes>
+		</div>
+	);
+}
+
 function App() {
-	//sets up the client-side routing
 	return (
 		<Router>
-			<div className="App">
-				<SearchBar />
-				{/* agregar componente breadcrumbs */}
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/items" element={<SearchResults />} />
-					<Route path="/items/:id" element={<ProductDetails />} />
-				</Routes>
-			</div>
+			<ContextProvider>
+				<Main />
+			</ContextProvider>
 		</Router>
 	);
 }
