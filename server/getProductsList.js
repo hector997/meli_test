@@ -2,8 +2,9 @@ import express from 'express';
 import axios from 'axios';
 
 const router = express.Router();
-function getNumberOfDecimals(number) {
-	return (number.toString().split('.')[1] || '').length; // this returns the number of decimals in a given number
+function getDecimals(number) {
+	const decimals = number.toString().split('.')[1];
+	return decimals ? decimals.length : 0;
 }
 function validateListData(item) {
 	// this validates each item and returns a default value if there is a missing value
@@ -14,7 +15,10 @@ function validateListData(item) {
 			currency:
 				typeof item.currency_id === 'string' ? item.currency_id : '',
 			amount: typeof item.price === 'number' ? item.price : 0,
-			decimals: getNumberOfDecimals(item.price || 0),
+			decimals:
+				item.price && typeof item.price === 'number'
+					? getDecimals(item.price)
+					: 0,
 		},
 		picture: typeof item.thumbnail === 'string' ? item.thumbnail : '',
 		condition: typeof item.condition === 'string' ? item.condition : '',
@@ -22,6 +26,13 @@ function validateListData(item) {
 			typeof item.shipping?.free_shipping === 'boolean'
 				? item.shipping.free_shipping
 				: false,
+		location:
+			item.location &&
+			item.location.city &&
+			item.location.city.name &&
+			typeof item.location.city.name === 'string'
+				? item.location.city.name
+				: '',
 	};
 }
 router.get('/list', async (req, res) => {
@@ -47,7 +58,7 @@ router.get('/list', async (req, res) => {
 		const uniqueCategories = [...new Set(categoriesArr)]; // removing duplicates using a set
 
 		const capedResults = data.results.slice(0, 4); // cap the results to 4 products
-
+		console.log(capedResults);
 		const formattedResults = capedResults.map((item) =>
 			validateListData(item)
 		);

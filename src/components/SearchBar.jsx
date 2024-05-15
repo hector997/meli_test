@@ -13,17 +13,29 @@ function SearchBar() {
 		e.preventDefault();
 		navigate(`/items?search=${query}`); // updates the URL with the search query
 	};
-
+	const clearInput = () => {
+		setQuery(''); // Clear the input
+		navigate('/'); // Navigate to home
+	};
 	return (
-		<form onSubmit={handleSubmit}>
-			<input
-				type="text"
-				value={query}
-				onChange={(e) => setQuery(e.target.value)}
-				placeholder="Search..."
-			/>
-			<button type="submit">buscar</button>
-		</form>
+		<div className="searchbar-container">
+			<div className="inner-searchbar">
+				<div className="logo-wrap" onClick={clearInput}>
+					<img src="/meli_logo.png" alt="" />
+				</div>
+				<form onSubmit={handleSubmit} className="searchbar">
+					<input
+						type="text"
+						value={query}
+						onChange={(e) => setQuery(e.target.value)}
+						placeholder="Nunca dejes de buscar"
+					/>
+					<button className="submit-btn" type="submit">
+						<img src="/lupa.png" alt="" />
+					</button>
+				</form>
+			</div>
+		</div>
 	);
 }
 

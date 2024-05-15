@@ -2,39 +2,50 @@ import express from 'express';
 import axios from 'axios';
 
 const router = express.Router();
-function getNumberOfDecimals(number) {
-	return (number.toString().split('.')[1] || '').length; // this returns the number of decimals in a given number
+function getDecimals(number) {
+	const decimals = number.toString().split('.')[1];
+	return decimals ? decimals.length : 0;
 }
 function validateDetailData(detailsData) {
 	// this validates each item and returns a default value if there is a missing value
 	return {
 		id: typeof detailsData.id === 'string' ? detailsData.id : null,
-		title: typeof detailsData.title === 'string' ? detailsData.title : '',
+		title:
+			detailsData.title && typeof detailsData.title === 'string'
+				? detailsData.title
+				: '',
 		price: {
 			currency:
-				typeof detailsData.currency === 'string'
-					? detailsData.currency
+				detailsData.currency_id &&
+				typeof detailsData.currency_id === 'string'
+					? detailsData.currency_id
 					: '',
 			amount:
-				typeof detailsData.amount === 'number' ? detailsData.amount : 0,
-			decimals: getNumberOfDecimals(detailsData.amount || 0),
+				detailsData.amount && typeof detailsData.amount === 'number'
+					? detailsData.amount
+					: 0,
+			decimals:
+				detailsData.price && typeof detailsData.price === 'number'
+					? getDecimals(detailsData.price)
+					: 0,
 		},
 		picture:
+			typeof detailsData.thumbnail &&
 			typeof detailsData.thumbnail === 'string'
 				? detailsData.thumbnail
 				: '',
 		condition:
-			typeof detailsData.condition === 'string'
+			detailsData.condition && typeof detailsData.condition === 'string'
 				? detailsData.condition
 				: '',
 		freeShipping:
 			typeof detailsData.shipping?.free_shipping === 'boolean'
 				? detailsData.shipping.free_shipping
 				: false,
-		// TODO: hay que traer la quantity de la lista de productos, aca no esta
 		soldQuantity:
-			typeof detailsData.initial_quantity === 'number'
-				? detailsData.initial_quantity
+			detailsData.sold_quantity &&
+			typeof detailsData.sold_quantity === 'number'
+				? detailsData.sold_quantity
 				: 0,
 	};
 }
@@ -72,7 +83,7 @@ router.get('/details', async (req, res) => {
 			},
 			item: {
 				...validatedDetails,
-				descriptionApi: validatedDescription,
+				description: validatedDescription.description,
 			},
 		};
 

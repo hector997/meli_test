@@ -68,40 +68,55 @@
 // export default SearchResults;
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAppContext } from '../context/ContextProvider';
+import Card from './Card';
+import { useState, useEffect } from 'react';
 
-function SearchResults({ items }) {
-	const { setSelectedProduct } = useAppContext();
+function SearchResults({ items, loading }) {
+	const [showError, setShowError] = useState(false);
 
-	const handleProductClick = (product) => {
-		setSelectedProduct(product);
-	};
+	useEffect(() => {
+		if (!loading && items.length === 0) {
+			const timer = setTimeout(() => setShowError(true), 300); // Adjust the delay as needed
+			return () => clearTimeout(timer);
+		} else {
+			setShowError(false);
+		}
+	}, [loading, items]);
 	return (
-		<div>
-			<h1>Resultados</h1>
-			<ul>
-				{items.length > 0 ? (
-					items.map((item, index) => (
-						<li
-							key={index}
-							onClick={() => handleProductClick(item)}
-						>
-							<Link to={`/items/${item.id}`}>
-								<img src={item.picture} alt={item.title} />
-								<p>{item.title}</p>
-								<p>
-									{item.price.currency} {item.price.amount}.
-									{item.price.decimals}
-								</p>
-								<p>{item.condition}</p>
-								{item.free_shipping && <p>Free Shipping</p>}
-							</Link>
+		<div className="search-results-container">
+			{loading ? (
+				<p>Cargando...</p>
+			) : (
+				items.map((item) => (
+					<Link
+						to={`/items/${item.id}`}
+						key={item.id}
+						className="card-link"
+					>
+						<Card data={item} />
+					</Link>
+				))
+			)}
+			{showError && (
+				<div className="no-results">
+					<p className="no-results-title">
+						No hay publicaciones que coincidan con tu búsqueda
+					</p>
+					<ul>
+						<li>
+							<span>Revisá la ortografía </span>de la palabra.
 						</li>
-					))
-				) : (
-					<p>Sin resultados</p>
-				)}
-			</ul>
+						<li>
+							Utilizá <span>palabras más genéricas</span> o menos
+							palabras.
+						</li>
+						<li>
+							<a href="/">Navegá por las categorías</a> para
+							encontrar un producto similar
+						</li>
+					</ul>
+				</div>
+			)}
 		</div>
 	);
 }
