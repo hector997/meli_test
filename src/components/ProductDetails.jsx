@@ -20,7 +20,7 @@ function ProductDetails() {
 
 	useEffect(() => {
 		if (id) {
-			console.log('id from param', id);
+			// console.log('id from param', id);
 			fetch(`/api/product/details?id=${id}`) // sends id to getProductDetails
 				.then((response) => {
 					if (!response.ok) {
@@ -29,32 +29,35 @@ function ProductDetails() {
 					return response.json();
 				})
 				.then((data) => {
-					console.log('displaying data');
 					setProduct(data.item);
 				})
 				.catch((error) => {
 					console.error('Error fetching product details:', error);
 					setError(error.message);
 				});
-		} else {
-			// setProduct([]); // if no query, clear results
 		}
 	}, [id]);
 
 	if (error) {
-		return <div>Error: {error}</div>;
+		return <div>Error when loading the product: {error}</div>;
 	}
 	if (!product) {
-		return <div className="loading">Cargando detalles...</div>;
+		return (
+			<div className="loading">
+				<div className="loader"></div>
+			</div>
+		);
 	}
 	const price = product.price ? formatPrice(product.price.amount) : null;
 
 	return (
 		<div className="product-view-container">
 			<div className="main-section">
-				<div className="product-image">
-					<img src={product.picture} alt={product.title} />
-				</div>
+				<div
+					className="product-image"
+					style={{ backgroundImage: `url(${product.picture})` }}
+				></div>
+
 				<div className="product-data">
 					<div className="upper-details">
 						{product.condition && (
@@ -94,7 +97,7 @@ function ProductDetails() {
 					<p className="desc-content">{product.description}</p>
 				) : (
 					<p className="desc-content">
-						'El vendedor no incluyó una descripción del producto'
+						El vendedor no incluyó una descripción del producto
 					</p>
 				)}
 			</div>

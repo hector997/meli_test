@@ -19,26 +19,25 @@ function Main() {
 	const [items, setItems] = useState(null);
 	const [categories, setCategories] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
 
 	const location = useLocation();
 	const query = useQuery().get('search');
 
 	useEffect(() => {
 		if (query) {
+			setCategories(null); //reset values
+			setItems(null);
 			setLoading(true);
+
 			fetch(`/api/products/list?q=${query}`)
 				.then((response) => response.json())
 				.then((data) => {
 					setItems(data.items);
 					setCategories(data.categories);
 					setLoading(false);
-
-					console.log('cats:', categories);
 				})
 				.catch((error) => {
 					console.error('Error fetching product list:', error);
-					setError(error.message);
 					setLoading(false);
 				});
 		}

@@ -26,7 +26,9 @@ function SearchResults({ items, loading }) {
 					</ul>
 				</div>
 			) : loading ? (
-				<p>Cargando...</p>
+				<div className="loading">
+					<div className="loader"></div>
+				</div>
 			) : (
 				items &&
 				items.map((item) => (

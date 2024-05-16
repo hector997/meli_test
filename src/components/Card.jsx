@@ -6,6 +6,12 @@ function Card({ data }) {
 	const formatPrice = (amount) => {
 		return new Intl.NumberFormat('de-DE').format(amount);
 	};
+	function truncateText(text) {
+		if (text.length <= 50) {
+			return text;
+		}
+		return text.substring(0, 50) + '...';
+	}
 	return (
 		<div className="card-wrapper">
 			<div className="card-inner">
@@ -32,6 +38,7 @@ function Card({ data }) {
 							</div>
 							{data.free_shipping && (
 								<img
+									title="Este producto cuenta con envío gratis"
 									className="free-shipping"
 									src="/public/shipping.png"
 									alt=""
@@ -45,7 +52,7 @@ function Card({ data }) {
 						)}
 					</div>
 					<div className="lower">
-						<p className="item-title">{data.title}</p>
+						<p className="item-title">{truncateText(data.title)}</p>
 					</div>
 				</div>
 			</div>

@@ -70,7 +70,6 @@ router.get('/details', async (req, res) => {
 			// this fetches the description after the details have been fetched. If there is no description, descriptionData remains empty
 			const descriptionResponse = await axios.get(descriptionApi);
 			descriptionData = descriptionResponse.data || {};
-			console.log(descriptionData);
 		} catch (error) {
 			if (error.response && error.response.status === 404) {
 				console.warn('No description found for ', productId);

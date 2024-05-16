@@ -39,7 +39,6 @@ function validateListData(item) {
 	};
 }
 router.get('/list', async (req, res) => {
-	console.log('---------------- get list for', req.query.q);
 	const query = req.query.q;
 	const apiUrl = `https://api.mercadolibre.com/sites/MLA/search?q=${query}`;
 
@@ -61,7 +60,7 @@ router.get('/list', async (req, res) => {
 		const uniqueCategories = [...new Set(categoriesArr)]; // removing duplicates using a set
 
 		const capedResults = data.results.slice(0, 4); // cap the results to 4 products
-		console.log(capedResults);
+		// console.log(capedResults);
 		const formattedResults = capedResults.map((item) =>
 			validateListData(item)
 		);
@@ -74,7 +73,6 @@ router.get('/list', async (req, res) => {
 			categories: uniqueCategories,
 			items: formattedResults,
 		};
-		console.log('######## getProducsList response:', response);
 		res.json(response);
 	} catch (error) {
 		console.error('Error fetching data:', error);
