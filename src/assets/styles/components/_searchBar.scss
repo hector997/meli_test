@@ -8,7 +8,7 @@
 	box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
 	.inner-searchbar {
 		margin: 10px;
-		width: 90%;
+		width: 1050px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -22,7 +22,7 @@
 		.searchbar {
 			z-index: 910;
 			transition: left 0.15s ease-out;
-			max-width: 720px;
+
 			display: flex;
 			width: 100%;
 			height: 40px;

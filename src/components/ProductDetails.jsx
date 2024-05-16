@@ -7,12 +7,15 @@ function ProductDetails() {
 	const [error, setError] = useState(null);
 
 	const conditionDictionary = {
-		new: 'nuevo',
-		used: 'usado',
+		new: 'Nuevo',
+		used: 'Usado',
 	};
 	const currencyDictionary = {
 		ARS: '$',
 		USD: 'U$',
+	};
+	const formatPrice = (amount) => {
+		return new Intl.NumberFormat('de-DE').format(amount);
 	};
 
 	useEffect(() => {
@@ -44,6 +47,7 @@ function ProductDetails() {
 	if (!product) {
 		return <div className="loading">Cargando detalles...</div>;
 	}
+	const price = product.price ? formatPrice(product.price.amount) : null;
 
 	return (
 		<div className="product-view-container">
@@ -56,21 +60,27 @@ function ProductDetails() {
 						{product.condition && (
 							<p>{conditionDictionary[product.condition]}</p>
 						)}
+						{product.condition && product.soldQuantity > 0 && (
+							<span>-</span>
+						)}
 						{product.soldQuantity > 0 && (
-							<p>- {product.soldQuantity} vendidos</p>
+							<p>
+								{product.soldQuantity}{' '}
+								{product.soldQuantity == 1
+									? 'vendido'
+									: 'vendidos'}
+							</p>
 						)}
 					</div>
 
-					<p>{product.title}</p>
+					<p className="item-title">{product.title}</p>
 					<div className="price-container">
-						{' '}
-						{product.price.currency &&
-							product.price.amount != null && (
-								<p>
-									{currencyDictionary[product.price.currency]}
-									{product.price.amount}
-								</p>
-							)}
+						{price && (
+							<p>
+								{currencyDictionary[product.price.currency]}
+								{price}
+							</p>
+						)}
 					</div>
 
 					<div className="buy-btn-container">
@@ -78,11 +88,15 @@ function ProductDetails() {
 					</div>
 				</div>
 			</div>
-			<div className="description-sectioon">
-				<p>Descripcion del producto</p>
-				{product.description
-					? product.description
-					: 'El vendedor no incluyó una descripción del producto'}
+			<div className="description-section">
+				<p className="desc-title">Descripcion del producto</p>
+				{product.description ? (
+					<p className="desc-content">{product.description}</p>
+				) : (
+					<p className="desc-content">
+						'El vendedor no incluyó una descripción del producto'
+					</p>
+				)}
 			</div>
 		</div>
 	);

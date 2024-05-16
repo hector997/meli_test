@@ -3,38 +3,49 @@ function Card({ data }) {
 		ARS: '$',
 		USD: 'U$',
 	};
+	const formatPrice = (amount) => {
+		return new Intl.NumberFormat('de-DE').format(amount);
+	};
 	return (
 		<div className="card-wrapper">
 			<div className="card-inner">
-				<div className="image-container">
-					<img src={data.picture} alt={data.title} />
-				</div>
+				<div
+					className="image-container"
+					style={{ backgroundImage: `url(${data.picture})` }}
+				></div>
+
 				<div className="card-content">
-					<div className="content-upper">
-						<div className="item-price">
-							{data.price.currency &&
-								data.price.amount != null && (
-									<p>
-										{
-											currencyDictionary[
-												data.price.currency
-											]
-										}
-										{data.price.amount}
-									</p>
-								)}
+					<div className="upper">
+						<div className="price-shipping">
+							<div className="item-price">
+								{data.price.currency &&
+									data.price.amount != null && (
+										<p>
+											{
+												currencyDictionary[
+													data.price.currency
+												]
+											}
+											{formatPrice(data.price.amount)}
+										</p>
+									)}
+							</div>
+							{data.free_shipping && (
+								<img
+									className="free-shipping"
+									src="/public/shipping.png"
+									alt=""
+								/>
+							)}
 						</div>
-						{data.free_shipping && (
-							<img
-								className="free-shipping"
-								src="/public/shipping.png"
-								alt=""
-							/>
+						{data.location && (
+							<div className="seller-location">
+								<p>{data.location}</p>
+							</div>
 						)}
 					</div>
-					<p className="item-title">{data.title}</p>
-					<div className="seller-location">
-						<p>Capital Federal</p>
+					<div className="lower">
+						<p className="item-title">{data.title}</p>
 					</div>
 				</div>
 			</div>

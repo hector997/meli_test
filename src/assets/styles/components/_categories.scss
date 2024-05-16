@@ -4,6 +4,36 @@
 	justify-content: flex-start;
 	color: $light-grey;
 	margin: 16px 0;
+	height: 21px;
+	.button-wrapper {
+		display: flex;
+		margin-right: 10px;
+		gap: 5px;
+		justify-content: flex-start;
+		align-items: center;
+		.go-back-button {
+			background-color: transparent;
+			border: none;
+			color: $light-grey;
+			cursor: pointer;
+			border-bottom: 1px solid transparent;
+			transition: all 0.2s;
+			margin: 0;
+			padding: 0 5px;
+			font-size: 14px;
+			margin-top: 2px;
+			&:hover {
+				border-color: $light-grey;
+			}
+			&:focus {
+				outline: none;
+				background-color: #71717137;
+			}
+		}
+		span {
+			margin-bottom: 2px;
+		}
+	}
 	.categories {
 		display: flex;
 		gap: 6px;
