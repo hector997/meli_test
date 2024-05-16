@@ -5,6 +5,10 @@
 	color: $light-grey;
 	margin: 16px 0;
 	height: 21px;
+	@media (max-width: 1200px) {
+		flex-wrap: wrap;
+		height: auto;
+	}
 	.button-wrapper {
 		display: flex;
 		margin-right: 10px;
@@ -22,6 +26,9 @@
 			padding: 0 5px;
 			font-size: 14px;
 			margin-top: 2px;
+			@media (max-width: 1200px) {
+				font-size: 11;
+			}
 			&:hover {
 				border-color: $light-grey;
 			}
@@ -32,15 +39,25 @@
 		}
 		span {
 			margin-bottom: 2px;
+			@media (max-width: 1200px) {
+				display: none;
+			}
 		}
 	}
 	.categories {
 		display: flex;
 		gap: 6px;
 		align-items: center;
+		@media (max-width: 1200px) {
+			gap: 3px;
+			flex-wrap: wrap;
+		}
 		.category-text {
 			margin: 0;
 			font-size: 14px;
+			@media (max-width: 1200px) {
+				font-size: 11px;
+			}
 		}
 		.chevron-right {
 			width: 15px;
