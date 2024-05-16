@@ -20,7 +20,10 @@ function validateListData(item) {
 					? getDecimals(item.price)
 					: 0,
 		},
-		picture: typeof item.thumbnail === 'string' ? item.thumbnail : '',
+		picture:
+			typeof item.thumbnail === 'string'
+				? item.thumbnail
+				: 'https://clarionhealthcare.com/wp-content/uploads/2020/12/default-fallback-image.png', //fallback image
 		condition: typeof item.condition === 'string' ? item.condition : '',
 		free_shipping:
 			typeof item.shipping?.free_shipping === 'boolean'

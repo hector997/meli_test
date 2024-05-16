@@ -27,9 +27,9 @@ function validateDetailData(detailsData) {
 					: 0,
 		},
 		picture:
-			detailsData.thumbnail && typeof detailsData.thumbnail === 'string'
-				? detailsData.thumbnail
-				: '',
+			detailsData.pictures && detailsData.pictures.length != 0
+				? detailsData.pictures[0].url
+				: 'https://clarionhealthcare.com/wp-content/uploads/2020/12/default-fallback-image.png',
 		condition:
 			detailsData.condition && typeof detailsData.condition === 'string'
 				? detailsData.condition
