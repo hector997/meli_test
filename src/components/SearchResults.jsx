@@ -1,35 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Card from './Card';
-import { useState, useEffect } from 'react';
 
 function SearchResults({ items, loading }) {
-	const [showError, setShowError] = useState(false);
-
-	useEffect(() => {
-		if (!loading && items.length === 0) {
-			const timer = setTimeout(() => setShowError(true), 300); // Adjust the delay as needed
-			return () => clearTimeout(timer);
-		} else {
-			setShowError(false);
-		}
-	}, [loading, items]);
+	const showError = !loading && items && items.length === 0;
 	return (
 		<div className="search-results-container">
-			{loading ? (
-				<p>Cargando...</p>
-			) : (
-				items.map((item) => (
-					<Link
-						to={`/items/${item.id}`}
-						key={item.id}
-						className="card-link"
-					>
-						<Card data={item} />
-					</Link>
-				))
-			)}
-			{showError && (
+			{showError ? (
 				<div className="no-results">
 					<p className="no-results-title">
 						No hay publicaciones que coincidan con tu búsqueda
@@ -48,6 +25,19 @@ function SearchResults({ items, loading }) {
 						</li>
 					</ul>
 				</div>
+			) : loading ? (
+				<p>Cargando...</p>
+			) : (
+				items &&
+				items.map((item) => (
+					<Link
+						to={`/items/${item.id}`}
+						key={item.id}
+						className="card-link"
+					>
+						<Card data={item} />
+					</Link>
+				))
 			)}
 		</div>
 	);

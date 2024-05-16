@@ -16,11 +16,12 @@ function useQuery() {
 	return new URLSearchParams(useLocation().search);
 }
 function Main() {
-	const [items, setItems] = useState([]);
-	const [categories, setCategories] = useState([]);
+	const [items, setItems] = useState(null);
+	const [categories, setCategories] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 
+	const location = useLocation();
 	const query = useQuery().get('search');
 
 	useEffect(() => {
@@ -47,9 +48,10 @@ function Main() {
 		<div className="App">
 			<SearchBar />
 			<div className="app-content">
-				{categories.length > 0 && (
+				{location.pathname !== '/' && (
 					<Categories categories={categories} />
 				)}
+
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route
